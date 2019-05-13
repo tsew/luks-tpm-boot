@@ -19,20 +19,18 @@ then
   PCRS="-r0 -r1 -r2 -r3 -r4 -r5 -r6 -r7 -r8 -r9 -r10 -r11 -r12 -r13" 
 fi 
 
-read -s -r -p "Owner password: " OWNERPW
-
 # Check if the NVRAM index already exists
 tpm_nvinfo | grep \($INDEX\) > /dev/null
 if [ $? -eq 0 ]
 then
-  tpm_nvrelease -i $INDEX -o"$OWNERPW"
+  tpm_nvrelease -i $INDEX -y
 fi
 
 # Create a new NVRAM index
-tpm_nvdefine -i $INDEX -s $(wc -c $KEYFILE) -p $PERMISSIONS -o "$OWNERPW" -z $PCRS
+tpm_nvdefine -i $INDEX -s $(wc -c $KEYFILE) -p $PERMISSIONS -y -z $PCRS
 
 # Write the index if creating the index succeeded
 if [ $? -eq 0 ]
 then
-  tpm_nvwrite -i $INDEX -f $KEYFILE -z --password="$OWNERPW"
+  tpm_nvwrite -i $INDEX -f $KEYFILE -z
 fi
