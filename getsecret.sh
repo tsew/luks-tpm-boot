@@ -14,7 +14,7 @@ else
     IN_FD="/proc/self/fd/2"
     echo >&2 "TPM failed, please enter fallback passphrase:"
     stty <$IN_FD -echo
-    read <$IN_FD -r 10 key
+    read <$IN_FD key
     stty <$IN_FD echo
     echo -n $key
 fi
